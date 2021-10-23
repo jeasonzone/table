@@ -1,16 +1,21 @@
 <template>
   <div class="main-container">
-    基本使用：
-    <TestTable :columns="arr" :rowsData="dataList"></TestTable>
-    <p>
-      参数：
-    </p>
+    <p>一、直接传入columns和rowsData</p>
+    <TestTable :columns="arr" :rowsData="dataList" :elipse="true"></TestTable>
+    <div class="container-demo-line"></div>
+    <p>二、手动加载数据</p>
+    <TestTable ref="table" :columns="arr"></TestTable>
+    <div class="container-demo-line"></div>
+    <p>三、不展示表头</p>
+    <TestTable :columns="arr" :rowsData="dataList" tableSize="easy" :elipse="true"></TestTable>
+    <div class="container-demo-line"></div>
+    待补充
   </div>
 </template>
 
 <script lang="ts">
 import { TestTable } from "../src/table";
-import { defineComponent, reactive } from "@vue/composition-api";
+import { defineComponent, reactive, ref, onMounted } from "@vue/composition-api";
 
 export default defineComponent({
   name: "App",
@@ -18,9 +23,11 @@ export default defineComponent({
     TestTable,
   },
   setup() {
-    let arr = reactive(["child", "age"]);
+    const table = ref<HTMLElement | null>(null);
+    
+    let arr = reactive([{label: '孩子', value: "child"}, {label: '年龄', value: "age"}]);
     let dataList = reactive([
-      { child: "小明", age: 20 },
+      { child: "小明", age: 3 },
       { child: "小黄", age: 22 },
       { child: "小亮", age: 34 },
       { child: "小王", age: 55 },
@@ -39,8 +46,12 @@ export default defineComponent({
       { child: "小青", age: 80 },
       { child: "小紫", age: 84 }
     ]);
+    onMounted(()=>{
 
-    return { arr, dataList };
+        // 手动载入数据
+        table.value?.loadData(dataList);
+    })
+    return { arr, dataList, table };
   },
 });
 </script>

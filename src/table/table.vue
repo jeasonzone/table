@@ -1,10 +1,10 @@
 <template>
   <div class="table-item">
     <table>
-      <thead>
+      <thead v-if="tableSize === 'normal'">
         <tr>
-          <th v-for="item in columns" :key="item" @click="sortBy(item)">
-            {{ item }}
+          <th v-for="item in columns" :key="item.value" @click="sortBy(item.value)">
+            {{ item.label }}
             <span
               v-if="item === sortKey"
               class="arrow"
@@ -15,8 +15,12 @@
       </thead>
       <tbody>
         <tr v-for="(item, idx) in listData" :key="idx">
-          <td v-for="(key, index) in columns" :key="index">
-            {{ item[key] }}
+          <td
+            v-for="(key, index) in columns"
+            :key="index"
+            :style="{ width: key.width + 'px' }"
+            :class="{'table-body-elipse': key.width && elipse}">
+            {{ item[key.value] }}
           </td>
         </tr>
       </tbody>
@@ -31,7 +35,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import PagingBar from "./paging.vue";
-import {SortOrder, Paging, List} from './interface';
+import {SortOrder, Paging, DataList, ColList, TableSize} from './interface';
 
 @Component({
   components: {
@@ -43,7 +47,7 @@ export default class Table extends Vue {
   tableId!: string;
 
   @Prop({ default: "normal" })
-  tableSize!: string;
+  tableSize!: TableSize;
 
   @Prop({ default: "" })
   autoLoadUrl!: string;
@@ -69,32 +73,38 @@ export default class Table extends Vue {
       return [];
     },
   })
-  columns!: [];
+  columns!: ColList;
 
   @Prop({
     default: () => {
       return [];
     },
   })
-  rowsData!: List;
+  rowsData!: DataList;
 
-  listData: List = [];
-  defaultData: List = [];
+  listData: DataList = [];
+  defaultData: DataList = [];
   activePage: number = 1;
   sortKey: string = "";
   sortOrders: SortOrder = {};
   mounted () {
     this.defaultData = this.rowsData;
     this.columns.filter((item) => {
-      this.sortOrders[item] = 1;
+      this.sortOrders[item.value] = 1;
     });
     this.loadData(this.rowsData);
   }
 
   // 排序功能
   sortBy(item: string) {
+    if(item === this.sortKey && this.sortOrders[item] === 1) {
+      this.sortKey = '';
+      this.loadData(this.defaultData);
+      return;
+    }
     this.sortKey = item;
     this.sortOrders[item] = -this.sortOrders[item];
+    this.loadData(this.rowsData);
   }
 
   // 表头排序按钮样式
@@ -108,7 +118,7 @@ export default class Table extends Vue {
   }
 
   // 加载表格数据
-  loadData(list: List = []) {
+  loadData(list: DataList = []) {
     let data = list;
     let order = this.sortOrders[this.sortKey];
     if (this.sortKey) {
@@ -183,5 +193,12 @@ table th {
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 4px solid red;
+}
+
+.table-body-elipse {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
