@@ -4,4 +4,9 @@ export interface Paging {
 export interface SortOrder {
     [key:string]: any
 };
-// 待补充
+
+export type ListItem = {
+    [key:string]: any
+}
+export type List = ListItem[];
+export type LoadFunc = (list: List) => void;

@@ -31,7 +31,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import PagingBar from "./paging.vue";
-import {SortOrder, Paging} from './interface';
+import {SortOrder, Paging, List} from './interface';
 
 @Component({
   components: {
@@ -76,10 +76,10 @@ export default class Table extends Vue {
       return [];
     },
   })
-  rowsData!: [];
+  rowsData!: List;
 
-  listData = [];
-  defaultData = [];
+  listData: List = [];
+  defaultData: List = [];
   activePage: number = 1;
   sortKey: string = "";
   sortOrders: SortOrder = {};
@@ -108,7 +108,7 @@ export default class Table extends Vue {
   }
 
   // 加载表格数据
-  loadData(list = []) {
+  loadData(list: List = []) {
     let data = list;
     let order = this.sortOrders[this.sortKey];
     if (this.sortKey) {
