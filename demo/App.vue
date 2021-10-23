@@ -1,12 +1,16 @@
 <template>
   <div class="main-container">
-    <TestTable :test="test" :columns="arr" :rowsData="dataList"></TestTable>
+    基本使用：
+    <TestTable :columns="arr" :rowsData="dataList"></TestTable>
+    <p>
+      参数：
+    </p>
   </div>
 </template>
 
 <script lang="ts">
 import { TestTable } from "../src/table";
-import { defineComponent, reactive, ref } from "@vue/composition-api";
+import { defineComponent, reactive } from "@vue/composition-api";
 
 export default defineComponent({
   name: "App",
@@ -14,7 +18,6 @@ export default defineComponent({
     TestTable,
   },
   setup() {
-    const test = ref(true);
     let arr = reactive(["child", "age"]);
     let dataList = reactive([
       { child: "小明", age: 20 },
@@ -37,7 +40,7 @@ export default defineComponent({
       { child: "小紫", age: 84 }
     ]);
 
-    return { test, arr, dataList };
+    return { arr, dataList };
   },
 });
 </script>

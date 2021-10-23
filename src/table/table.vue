@@ -3,95 +3,141 @@
     <table>
       <thead>
         <tr>
-          <th v-for="(item, key) in columns" :key="key" @click="sortBy(item)">
+          <th v-for="item in columns" :key="item" @click="sortBy(item)">
             {{ item }}
-            <span v-if="item === sortKey" class="arrow" :class="getSortBtnCls(item)"></span>
+            <span
+              v-if="item === sortKey"
+              class="arrow"
+              :class="getSortBtnCls(item)"
+            ></span>
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, key) in filteredData" :key="key">
-          <td v-for="(key, idx) in columns" :key="idx">
+        <tr v-for="(item, idx) in listData" :key="idx">
+          <td v-for="(key, index) in columns" :key="index">
             {{ item[key] }}
           </td>
         </tr>
       </tbody>
     </table>
-    
-    <PagingBar :total="rowsData.length" :pageSize.sync="pageSize" @changePage="changePage" />
+    <PagingBar
+      :total="rowsData.length"
+      @changePage="changePage"
+    />
   </div>
 </template>
 
-<script>
-import PagingBar from './paging.vue';
+<script lang="ts">
+import { Component, Vue, Prop } from "vue-property-decorator";
+import PagingBar from "./paging.vue";
+import {SortOrder, Paging} from './interface';
 
-export default {
+@Component({
   components: {
-    PagingBar
+    PagingBar,
   },
-  props: {
-    columns: {
-      type: Array,
-      require: true,
-      default() {
-        return [];
-      },
-    },
-    rowsData: {
-      type: Array,
-      require: true,
-      default() {
-        return [];
-      },
-    },
-    pageSize: {
-      type: Number,
-      default: 10
-    }
-  },
-  mounted() {
-    this.defaultData = this.rowsData;
-  },
-  data() {
-    let sortOrders = {};
-    this.columns.filter((item) => {
-      sortOrders[item] = 1;
-    });
+})
+export default class Table extends Vue {
+  @Prop({ default: "" })
+  tableId!: string;
+
+  @Prop({ default: "normal" })
+  tableSize!: string;
+
+  @Prop({ default: "" })
+  autoLoadUrl!: string;
+
+  @Prop({ default: false })
+  elipse!: boolean;
+
+  @Prop({ default: false })
+  isAllowCheck!: boolean;
+
+  @Prop({ default: false })
+  autoLoad!: boolean;
+
+  @Prop({default: () => {
     return {
-      defaultData: [],
-      activePage: 1,
-      sortKey: "",
-      sortOrders: sortOrders
+      pageSize: 10
     };
-  },
-  computed: {
-    filteredData() {
-      let data = this.rowsData;
-      let order = this.sortOrders[this.sortKey];
-      if (this.sortKey) {
-        data = this.rowsData.slice(0).sort((pre, aft) => {
-          pre = pre[this.sortKey];
-          aft = aft[this.sortKey];
-          return (pre === aft ? 0 : pre > aft ? 1 : -1) * order;
-        });
-      }
-      let firstItem = this.pageSize * (this.activePage - 1) + 1;
-      return data.slice(firstItem - 1, firstItem + this.pageSize - 1);
+  }})
+  paging!: Paging;
+
+  @Prop({
+    default: () => {
+      return [];
     },
-  },
-  methods: {
-    sortBy(item) {
-      this.sortKey = item;
-      this.sortOrders[item] = - (this.sortOrders[item]);
+  })
+  columns!: [];
+
+  @Prop({
+    default: () => {
+      return [];
     },
-    getSortBtnCls (item) {
-      return this.sortOrders?.[item] === 1 ? 'asc' : 'dsc';
-    },
-    changePage (v) {
-      this.activePage = v;
+  })
+  rowsData!: [];
+
+  listData = [];
+  defaultData = [];
+  activePage: number = 1;
+  sortKey: string = "";
+  sortOrders: SortOrder = {};
+  mounted () {
+    this.defaultData = this.rowsData;
+    this.columns.filter((item) => {
+      this.sortOrders[item] = 1;
+    });
+    this.loadData(this.rowsData);
+  }
+
+  // 排序功能
+  sortBy(item: string) {
+    this.sortKey = item;
+    this.sortOrders[item] = -this.sortOrders[item];
+  }
+
+  // 表头排序按钮样式
+  getSortBtnCls(item: string) {
+    return this.sortOrders?.[item] === 1 ? "asc" : "dsc";
+  }
+
+  // 分页页数跳转
+  changePage(v: number) {
+    this.activePage = v;
+  }
+
+  // 加载表格数据
+  loadData(list = []) {
+    let data = list;
+    let order = this.sortOrders[this.sortKey];
+    if (this.sortKey) {
+      data = this.rowsData.slice(0).sort((pre, aft) => {
+        pre = pre[this.sortKey];
+        aft = aft[this.sortKey];
+        return (pre === aft ? 0 : pre > aft ? 1 : -1) * order;
+      });
     }
-  },
-};
+    let firstItem = this.paging?.pageSize * (this.activePage - 1) + 1;
+    this.listData = data.slice(
+      firstItem - 1,
+      firstItem + this.paging?.pageSize - 1
+    );
+  }
+
+  // 清空表格数据
+  clearData() {
+    this.listData = [];
+  }
+
+  // 获取表格数据
+  getData() {
+    return this.listData || [];
+  }
+
+  // 获取勾选的行
+  getSelection() {}
+}
 </script>
 
 <style scoped>
