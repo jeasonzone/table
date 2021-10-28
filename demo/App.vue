@@ -3,13 +3,12 @@
     <p>一、直接传入columns和rowsData</p>
     <TestTable :columns="arr" :rowsData="dataList" :elipse="true"></TestTable>
     <div class="container-demo-line"></div>
-    <p>二、手动加载数据</p>
-    <TestTable ref="table" :columns="arr"></TestTable>
-    <div class="container-demo-line"></div>
-    <p>三、不展示表头</p>
+    <p>二、不展示表头</p>
     <TestTable :columns="arr" :rowsData="dataList" tableSize="easy" :elipse="true"></TestTable>
     <div class="container-demo-line"></div>
-    待补充
+    <p>三、不展示分页</p>
+    <TestTable :columns="arr" :rowsData="dataList" :isShowPaging="false"></TestTable>
+    <div class="container-demo-line"></div>
   </div>
 </template>
 
@@ -28,29 +27,22 @@ export default defineComponent({
     let arr = reactive([{label: '孩子', value: "child"}, {label: '年龄', value: "age"}]);
     let dataList = reactive([
       { child: "小明", age: 3 },
-      { child: "小黄", age: 22 },
-      { child: "小亮", age: 34 },
-      { child: "小王", age: 55 },
-      { child: "小丑", age: 88 },
-      { child: "小张", age: 29 },
-      { child: "大明", age: 55 },
-      { child: "大黄", age: 44 },
-      { child: "大亮", age: 59 },
-      { child: "大王", age: 89 },
-      { child: "大丑", age: 71 },
-      { child: "大张", age: 26 },
-      { child: "小丽", age: 2 },
-      { child: "小红", age: 64 },
-      { child: "小绿", age: 53 },
-      { child: "小蓝", age: 60 },
-      { child: "小青", age: 80 },
-      { child: "小紫", age: 84 }
+      { child: "小黄", age: 1 },
+      { child: "小亮", age: 2 },
+      { child: "小红", age: 4 },
+      { child: "小橙", age: 5 },
+      { child: "小绿", age: 6 },
+      { child: "小白", age: 7 },
+      { child: "小青", age: 8 },
+      { child: "小蓝", age: 33 },
+      { child: "小紫", age: 5 },
+      { child: "小丑", age: 7 },
+      { child: "小九", age: 9 },
+      { child: "小七", age: 7 },
+      { child: "小八", age: 77 },
+      { child: "小鬼", age: 3 },
+      { child: "小狗", age: 22 },
     ]);
-    onMounted(()=>{
-
-        // 手动载入数据
-        table.value?.loadData(dataList);
-    })
     return { arr, dataList, table };
   },
 });

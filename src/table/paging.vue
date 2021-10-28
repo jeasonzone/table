@@ -26,51 +26,58 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    total: {
-      type: Number,
-      default: 0
-    },
-    pageSize: {
-      type: Number,
-      default: 5
+<script lang="ts">
+import { defineComponent, computed, ref } from '@vue/composition-api';
+import { pagingProps } from "./types";
+export default defineComponent ({
+  name: "Paging",
+  props: pagingProps,
+  emits: ['changePage'],
+  setup (props, { emit }) {
+    let { total, pageSize } = props;
+    let pageIdx = ref(1);
+
+    const isDisablePre = computed(() => {
+      return pageIdx.value === 1;
+    });
+
+    const isDisableAft = computed(() => {
+      return (total < pageSize) || (Math.ceil(total / pageSize) === pageIdx.value);
+    });
+
+    const go2PrePage = () => {
+      
+      if (isDisablePre.value) { return; }
+      pageIdx.value --;
+      emit('changePage', pageIdx.value);
     }
-  },
-  computed: {
-    isDisablePre () {
-      return this.pageIdx === 1;
-    },
-    isDisableAft () {
-      return (this.total < this.pageSize) || (Math.ceil(this.total / this.pageSize) === this.pageIdx);
+
+    const go2AftPage = () => {
+      if (isDisableAft.value) { return; }
+      pageIdx.value ++;
+      emit('changePage', pageIdx.value);
     }
-  },
-  data() {
+
+    const doSearch = () => {
+      emit('changePage', pageIdx.value);
+    }
+
+    const changePageSize = () => {
+      pageIdx.value = 1;
+      emit('update:pageSize', parseInt(pageSize));
+    }
+
     return {
-      pageIdx: 1
+      pageIdx,
+      isDisablePre,
+      isDisableAft,
+      go2AftPage,
+      go2PrePage,
+      doSearch,
+      changePageSize
     };
-  },
-  methods: {
-    go2PrePage () {
-      if (this.isDisablePre) {return;}
-      this.pageIdx --;
-      this.$emit('changePage', this.pageIdx);
-    },
-    go2AftPage () {
-      if (this.isDisableAft) {return;}
-      this.pageIdx ++;
-      this.$emit('changePage', this.pageIdx);
-    },
-    doSearch() {
-        this.$emit('changePage', this.pageIdx);
-    },
-    changePageSize () {
-      this.pageIdx = 1;
-      this.$emit('update:pageSize', parseInt(this.pageSize));
-    }
   }
-};
+});
 </script>
 
 <style scoped>
