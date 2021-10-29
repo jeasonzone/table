@@ -42,6 +42,8 @@ module.exports = {
   moduleNameMapper: {
     '^@tests': '<rootDir>/tests',
     '^@tests/(.*)$': '<rootDir>/tests/$1',
+    '^lodash-es$': 'lodash',
+    '\\.(css|less)$': 'identity-obj-proxy'
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
   collectCoverage: true,

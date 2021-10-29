@@ -1,11 +1,12 @@
 <template>
-  <div class="table-item">
+  <div class="jeason-table">
     <table>
-      <thead v-if="tableSize === 'normal'">
+      <thead v-if="tableSize === 'normal'" class="jeason-table-header">
         <tr>
           <th
             v-for="item in columns"
             :key="item.value"
+            class="jeason-table-th"
             @click="sortBy(item.value)"
           >
             {{ item.label }}
@@ -18,7 +19,7 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="jeason-table-body">
         <tr v-for="(item, idx) in listData" :key="idx">
           <td
             v-for="(key, index) in columns"
@@ -31,7 +32,7 @@
         </tr>
       </tbody>
     </table>
-    <div v-if="isShowPaging" class="table-item-footer">
+    <div v-if="isShowPaging" class="jeason-table-footer">
       <PagingBar
         :total="rowsData.length"
         :pageSize.sync="pageSizes"
@@ -183,7 +184,7 @@ table th {
   text-overflow: ellipsis;
 }
 
-.table-item-footer {
+.jeason-table-footer {
   display: flex;
   width: 100%;
   justify-content: flex-end;

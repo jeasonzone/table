@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="3" failures="1" errors="0" time="4.786">
+  <testsuite name="Table" errors="0" failures="1" skipped="0" timestamp="2021-10-29T15:01:47" time="2.065" tests="3">
+    <testcase classname="Table render" name="Table render" time="0.056">
+    </testcase>
+    <testcase classname="Table 基础使用展示" name="Table 基础使用展示" time="0.04">
+    </testcase>
+    <testcase classname="Table 点击升降序" name="Table 点击升降序" time="0.034">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+    at Object.&lt;anonymous&gt; (C:\table\table\src\__tests__\table.spec.js:78:44)
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
