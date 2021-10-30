@@ -16,7 +16,7 @@
     <!-- 下一页 -->
 
     <div class="select">
-      <select name="group" v-model="pageSize" @change="changePageSize">
+      <select name="group" v-model="pageSizeVal" @change="changePageSize">
         <option value="5" selected>5</option>
         <option value="10">10</option>
         <option value="20">20</option>
@@ -36,6 +36,7 @@ export default defineComponent ({
   setup (props, { emit }) {
     let { total, pageSize } = props;
     let pageIdx = ref(1);
+    let pageSizeVal = ref(pageSize);
 
     const isDisablePre = computed(() => {
       return pageIdx.value === 1;
@@ -64,13 +65,14 @@ export default defineComponent ({
 
     const changePageSize = () => {
       pageIdx.value = 1;
-      emit('update:pageSize', parseInt(pageSize));
+      emit('updatePageSize', parseInt(pageSizeVal.value));
     }
 
     return {
       pageIdx,
       isDisablePre,
       isDisableAft,
+      pageSizeVal,
       go2AftPage,
       go2PrePage,
       doSearch,
