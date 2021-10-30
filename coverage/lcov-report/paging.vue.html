@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">59.09% </span>
+                <span class="strong">51.85% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/22</span>
+                <span class='fraction'>14/27</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">59.09% </span>
+                <span class="strong">51.85% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/22</span>
+                <span class='fraction'>14/27</span>
             </div>
         
             
@@ -232,7 +232,11 @@
 <a name='L173'></a><a href='#L173'>173</a>
 <a name='L174'></a><a href='#L174'>174</a>
 <a name='L175'></a><a href='#L175'>175</a>
-<a name='L176'></a><a href='#L176'>176</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -263,6 +267,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -281,7 +286,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -290,14 +302,10 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -438,6 +446,7 @@
 &lt;script lang="ts"&gt;
 import { defineComponent, computed, ref } from '@vue/composition-api';
 import { pagingProps } from "./types";
+import {logFn} from './utils.ts';
 export default defineComponent ({
   name: "Paging",
   props: pagingProps,
@@ -456,23 +465,26 @@ export default defineComponent ({
     });
 &nbsp;
 <span class="fstat-no" title="function not covered" >    const go2PrePage = () =&gt; {</span>
-      
+<span class="cstat-no" title="statement not covered" >      logFn('log', { module: 'table-pagging前一页' });</span>
 <span class="cstat-no" title="statement not covered" ><span class="missing-if-branch" title="if path not taken" >I</span>      if (isDisablePre.value) { return; }</span>
 <span class="cstat-no" title="statement not covered" >      pageIdx.value --;</span>
 <span class="cstat-no" title="statement not covered" >      emit('changePage', pageIdx.value);</span>
     }
 &nbsp;
 <span class="fstat-no" title="function not covered" >    const go2AftPage = () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      logFn('log', { module: 'table-pagging后一页' });</span>
 <span class="cstat-no" title="statement not covered" ><span class="missing-if-branch" title="if path not taken" >I</span>      if (isDisableAft.value) { return; }</span>
 <span class="cstat-no" title="statement not covered" >      pageIdx.value ++;</span>
 <span class="cstat-no" title="statement not covered" >      emit('changePage', pageIdx.value);</span>
     }
 &nbsp;
 <span class="fstat-no" title="function not covered" >    const doSearch = () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      logFn('log', { module: 'table-pagging前往某一页', result: pageIdx.value});</span>
 <span class="cstat-no" title="statement not covered" >      emit('changePage', pageIdx.value);</span>
     }
 &nbsp;
 <span class="fstat-no" title="function not covered" >    const changePageSize = () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      logFn('log', { module: 'table-pagging改变页面规格', result: parseInt(pageSizeVal.value)});</span>
 <span class="cstat-no" title="statement not covered" >      pageIdx.value = 1;</span>
 <span class="cstat-no" title="statement not covered" >      emit('updatePageSize', parseInt(pageSizeVal.value));</span>
     }
@@ -589,7 +601,7 @@ export default defineComponent ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Oct 30 2021 16:05:16 GMT+0800 (中国标准时间)
+                at Sat Oct 30 2021 20:06:04 GMT+0800 (中国标准时间)
             </div>
         </div>
         <script src="prettify.js"></script>

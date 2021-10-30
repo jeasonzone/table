@@ -1,11 +1,14 @@
 import {
   defineComponent,
-  reactive,
+  set,
   ref,
-  onMounted  
+  onMounted
 } from '@vue/composition-api';
 import { tableProps, DataList, SortOrder } from "./types";
 import PagingBar from "./paging.vue";
+import TableHead from "./head";
+import TableBody from "./body";
+import {logFn} from './utils.ts';
 
 export default defineComponent({
   // eslint-disable-next-line vue/require-prop-types
@@ -17,42 +20,22 @@ export default defineComponent({
     let activePage = ref(1);
     let sortKey = ref("");
     let listData: DataList = ref([]);
-    let defaultData: DataList =ref([]);
-    let sortOrders: SortOrder = reactive({});
+    let defaultData: DataList =ref(rowsData);
+    let sortOrders: SortOrder = ref({});
 
     onMounted(() => {
-      defaultData = rowsData;
+      logFn('trace', { module: 'table-init初始化' });
       columns.filter((item) => {
-        sortOrders[item.value] = 1;
+        set(sortOrders.value, item.value, 1)
       });
       loadData(rowsData);
     });
 
-    const getSortBtnCls = (item: string) => {
-      return sortOrders[item] === 1 ? "asc" : "dsc";
-    };
-
-    // 排序功能
-    const sortBy = (item: string) => {
-      if(item === sortKey.value && sortOrders[item] === 1) {
-        sortKey.value = '';
-        loadData(defaultData);
-        return;
-      }
-      sortKey.value = item;
-      sortOrders[item] = -sortOrders[item];
-      loadData(rowsData);
-    }
-
-    // 分页页数跳转
-    const changePage = (v: number) => {
-      activePage.value = v;
-      loadData(rowsData);
-    }
-
+    // 记载表格数据
     const loadData = (list: DataList) => {
+      logFn('info', { module: 'table-info-load记载表格数据', target: 'list', result: list });
       let data = list;
-      let order = sortOrders[sortKey.value];
+      let order = sortOrders.value[sortKey.value];
       if (sortKey.value) {
         data = rowsData.slice(0).sort((pre, aft) => {
           pre = pre[sortKey.value];
@@ -66,48 +49,54 @@ export default defineComponent({
 
     // 获取表格数据
     const getData = () => {
+      logFn('log', { module: 'table-get-info获取表格数据', target: 'listData', result: listData.value });
       return listData.value || [];
     }
     
     // 获取勾选的行
-    const getSelection = () => {}
+    const getSelection = () => {};
 
-
+    // 改变页面规格
     const changePageSize = (v) => {
+      logFn('log', { module: 'table-change-size改变页面规格', target: 'changePageSize', result: v });
       pageSizes = v;
       loadData(rowsData);
     }
 
+    // 分页页数跳转
+    const changePage = (v: number) => {
+      logFn('log', { module: 'table-jump-page跳转页面', target: 'changePage', result: v });
+      activePage.value = v;
+      loadData(rowsData);
+    }
+
+    // 重新加载表格
+    const reloadTable = (type?: string) => {
+      logFn('log', { module: 'table-reload-重新加载表格', target: 'reloadTable'});
+      if (!type) {
+        sortKey.value = '';
+      } else {
+        sortKey.value = type;
+        sortOrders.value[type] = -sortOrders.value[type];
+      }
+      loadData(type ? rowsData : defaultData.value);
+    }
+
     return () => {
-      const renderTh = columns?.map((item) => {
-        return (<th
-            class="jeason-table-th"
-            onClick={ sortBy.bind(this, item.value) }>
-            { item.label }
-            { item.value === sortKey.value ? <span class={[getSortBtnCls(item.value), 'arrow']}></span> : '' }
-          </th>)
-      });
-      const renderBody = listData?.value?.map(item => {
-        let renderTd = columns?.map(key => {
-          return (<td>
-            {item[key.value]}
-          </td>)
-        })
-        return (<tr>{renderTd}</tr>)
-      })
       const sortableNode = (
           <div class="jeason-table">
             <table>
             { tableSize === 'normal' ? <thead class="jeason-table-header">
-                <tr>
-                  {renderTh}
-                </tr>
+
+                {/* 头部 */}
+                <TableHead cols={columns} sortOrders={sortOrders} sortKey={sortKey} on={{['reloadTable']: reloadTable}} />
               </thead> : '' }
-              <tbody class="jeason-table-body">
-                {renderBody}
-              </tbody>
+
+              {/* 内容部分 */}
+              <TableBody cols={columns} listData={listData} />
             </table>
             
+            {/* 尾部 */}
             { isShowPaging ? <div class="jeason-table-footer">
               <PagingBar
                 total={rowsData.length}

@@ -29,6 +29,7 @@
 <script lang="ts">
 import { defineComponent, computed, ref } from '@vue/composition-api';
 import { pagingProps } from "./types";
+import {logFn} from './utils.ts';
 export default defineComponent ({
   name: "Paging",
   props: pagingProps,
@@ -47,23 +48,26 @@ export default defineComponent ({
     });
 
     const go2PrePage = () => {
-      
+      logFn('log', { module: 'table-pagging前一页' });
       if (isDisablePre.value) { return; }
       pageIdx.value --;
       emit('changePage', pageIdx.value);
     }
 
     const go2AftPage = () => {
+      logFn('log', { module: 'table-pagging后一页' });
       if (isDisableAft.value) { return; }
       pageIdx.value ++;
       emit('changePage', pageIdx.value);
     }
 
     const doSearch = () => {
+      logFn('log', { module: 'table-pagging前往某一页', result: pageIdx.value});
       emit('changePage', pageIdx.value);
     }
 
     const changePageSize = () => {
+      logFn('log', { module: 'table-pagging改变页面规格', result: parseInt(pageSizeVal.value)});
       pageIdx.value = 1;
       emit('updatePageSize', parseInt(pageSizeVal.value));
     }
