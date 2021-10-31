@@ -24,7 +24,7 @@ export default defineComponent({
   setup() {
     const table = ref<HTMLElement | null>(null);
     
-    let arr = reactive([{label: '孩子', value: "child"}, {label: '年龄', value: "age"}]);
+    let arr = reactive([{label: '孩子', value: "child", align: 'center'}, {label: '年龄', value: "age"}]);
     let dataList = reactive([
       { child: "小明", age: 3 },
       { child: "小黄", age: 1 },

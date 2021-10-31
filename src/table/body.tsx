@@ -9,7 +9,9 @@ export default defineComponent({
     return () => {
       const renderBody = listData?.value?.map(item => {
         let renderTd = cols?.map(key => {
-          return (<td class={[{'table-body-elipse': key.width && elipse}]} style={ key.width ? [{width: key.width + 'px'}] : '' }>
+          return (<td
+            class={[{'table-body-elipse': key.width && elipse}, 'jeason-table-td']}
+            style={[key.width ? [{width: key.width + 'px'}] : '', {textAlign: key.align}]}>
             {item[key.value]}
           </td>)
         })

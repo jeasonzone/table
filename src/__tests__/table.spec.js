@@ -5,6 +5,7 @@ describe('Table', () => {
   const TableMount = options => mount(TestTable, options)
 
   const columns = [{label: '孩子', value: "child"}, {label: '年龄', value: "age"}];
+  const columnsAlign = [{label: '孩子', value: "child", align: 'center'}, {label: '年龄', value: "age"}];
   const rowsData = [
     { child: "小明", age: 3 },
     { child: "小黄", age: 1 },
@@ -95,5 +96,17 @@ describe('Table', () => {
     expect(wrapper.find('.jeason-table-header').exists()).toBe(true);  // 展示表格头部
     expect(wrapper.find('.jeason-table-body').exists()).toBe(true);  // 展示表格内容
     expect(wrapper.find('.jeason-table-footer').exists()).not.toBe(true);  // 隐藏表格尾部分页
+  })
+
+  test('配置居中对齐', async () => {
+    const wrapper = TableMount({
+      propsData: {
+        rowsData: rowsData,
+        columns: columnsAlign
+      },
+    })
+
+    expect(wrapper.find('.jeason-table-th').element.style.textAlign).toBe('center');
+    expect(wrapper.find('.jeason-table-td').element.style.textAlign).toBe('center');
   })
 })
