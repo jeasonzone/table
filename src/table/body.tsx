@@ -3,13 +3,13 @@ import { defineComponent } from '@vue/composition-api'
 export default defineComponent({
   // eslint-disable-next-line vue/require-prop-types
   name: 'Body',
-  props: ['cols', 'listData'],
+  props: ['cols', 'listData', 'elipse'],
   setup(props) {
-    const { cols, listData } = props;
+    const { cols, listData, elipse } = props;
     return () => {
       const renderBody = listData?.value?.map(item => {
         let renderTd = cols?.map(key => {
-          return (<td>
+          return (<td class={[{'table-body-elipse': key.width && elipse}]} style={ key.width ? [{width: key.width + 'px'}] : '' }>
             {item[key.value]}
           </td>)
         })

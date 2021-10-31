@@ -1,7 +1,7 @@
 <template>
   <div class="main-container">
     <p>一、直接传入columns和rowsData</p>
-    <TestTable :columns="arr" :rowsData="dataList" :elipse="true"></TestTable>
+    <TestTable ref="table" :columns="arr" :rowsData="dataList" :elipse="true"></TestTable>
     <div class="container-demo-line"></div>
     <p>二、不展示表头</p>
     <TestTable :columns="arr" :rowsData="dataList" tableSize="easy" :elipse="true"></TestTable>
@@ -9,6 +9,7 @@
     <p>三、不展示分页</p>
     <TestTable :columns="arr" :rowsData="dataList" :isShowPaging="false"></TestTable>
     <div class="container-demo-line"></div>
+    <button @click="wwww">www</button>
   </div>
 </template>
 
@@ -43,7 +44,10 @@ export default defineComponent({
       { child: "小鬼", age: 3 },
       { child: "小狗", age: 22 },
     ]);
-    return { arr, dataList, table };
+    const wwww = () => {
+      console.log(table.value);
+    }
+    return { arr, dataList, table, wwww };
   },
 });
 </script>

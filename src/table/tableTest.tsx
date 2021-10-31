@@ -24,7 +24,7 @@ export default defineComponent({
     let sortOrders: SortOrder = ref({});
 
     onMounted(() => {
-      logFn('trace', { module: 'table-init初始化' });
+      logFn('info', { module: 'table-init初始化' });
       columns.filter((item) => {
         set(sortOrders.value, item.value, 1)
       });
@@ -93,9 +93,8 @@ export default defineComponent({
               </thead> : '' }
 
               {/* 内容部分 */}
-              <TableBody cols={columns} listData={listData} />
+              <TableBody cols={columns} listData={listData} elipse={props.elipse} />
             </table>
-            
             {/* 尾部 */}
             { isShowPaging ? <div class="jeason-table-footer">
               <PagingBar

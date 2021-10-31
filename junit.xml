@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="3" failures="0" errors="0" time="6.98">
-  <testsuite name="Table" errors="0" failures="0" skipped="0" timestamp="2021-10-30T12:06:00" time="3.748" tests="3">
-    <testcase classname="Table render" name="Table render" time="0.149">
+<testsuites name="jest tests" tests="5" failures="0" errors="0" time="6.85">
+  <testsuite name="Table" errors="0" failures="0" skipped="0" timestamp="2021-10-31T12:17:53" time="3.068" tests="5">
+    <testcase classname="Table render" name="Table render" time="0.142">
     </testcase>
-    <testcase classname="Table 基础使用展示" name="Table 基础使用展示" time="0.054">
+    <testcase classname="Table 基础使用展示" name="Table 基础使用展示" time="0.058">
     </testcase>
-    <testcase classname="Table 点击升降序" name="Table 点击升降序" time="0.11">
+    <testcase classname="Table 点击升降序" name="Table 点击升降序" time="0.092">
+    </testcase>
+    <testcase classname="Table 配置不展示表头" name="Table 配置不展示表头" time="0.026">
+    </testcase>
+    <testcase classname="Table 配置不展示分页" name="Table 配置不展示分页" time="0.034">
     </testcase>
   </testsuite>
 </testsuites>
