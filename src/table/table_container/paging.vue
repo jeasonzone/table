@@ -5,18 +5,18 @@
     <!-- 上一页 -->
 
     <input
+      v-model="pageIdx"
       class="paging-input"
       type="text"
-      v-model="pageIdx"
       @keyup.enter="doSearch"
-    />
+    >
 
     <!-- 下一页 -->
     <div class="aft-btn" :class="{'disable-btn': isDisableAft}" @click="go2AftPage">下一页</div>
     <!-- 下一页 -->
 
     <div class="select">
-      <select name="group" v-model="pageSizeVal" @change="changePageSize">
+      <select v-model="pageSizeVal" name="group" @change="changePageSize">
         <option value="5" selected>5</option>
         <option value="10">10</option>
         <option value="20">20</option>
@@ -27,48 +27,48 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from '@vue/composition-api';
-import { pagingProps } from "./types";
-import {logFn} from './utils.ts';
+import { computed, defineComponent, ref } from '@vue/composition-api'
+import { pagingProps } from '../lib/types'
+import { logFn } from '../lib/utils'
 export default defineComponent ({
-  name: "Paging",
+  name: 'Paging',
   props: pagingProps,
-  emits: ['changePage'],
+  emits: ['changePage', 'updatePageSize'],
   setup (props, { emit }) {
-    let { total, pageSize } = props;
-    let pageIdx = ref(1);
-    let pageSizeVal = ref(pageSize);
+    let { total, pageSize } = props
+    let pageIdx = ref(1)
+    let pageSizeVal = ref(pageSize)
 
     const isDisablePre = computed(() => {
-      return pageIdx.value === 1;
-    });
+      return pageIdx.value === 1
+    })
 
     const isDisableAft = computed(() => {
-      return (total < pageSize) || (Math.ceil(total / pageSize) === pageIdx.value);
-    });
+      return (total < pageSize) || (Math.ceil(total / pageSize) === pageIdx.value)
+    })
 
     const go2PrePage = () => {
-      logFn('log', { module: 'table-pagging前一页' });
-      if (isDisablePre.value) { return; }
-      pageIdx.value --;
-      emit('changePage', pageIdx.value);
+      logFn('log', { module: 'table-pagging前一页' })
+      if (isDisablePre.value) { return }
+      pageIdx.value --
+      emit('changePage', pageIdx.value)
     }
 
     const go2AftPage = () => {
-      logFn('log', { module: 'table-pagging后一页' });
-      if (isDisableAft.value) { return; }
-      pageIdx.value ++;
-      emit('changePage', pageIdx.value);
+      logFn('log', { module: 'table-pagging后一页' })
+      if (isDisableAft.value) { return }
+      pageIdx.value ++
+      emit('changePage', pageIdx.value)
     }
 
     const doSearch = () => {
-      logFn('log', { module: 'table-pagging前往某一页', result: pageIdx.value});
-      emit('changePage', pageIdx.value);
+      logFn('log', { module: 'table-pagging前往某一页', result: pageIdx.value })
+      emit('changePage', pageIdx.value)
     }
 
     const changePageSize = () => {
-      logFn('log', { module: 'table-pagging改变页面规格', result: parseInt(pageSizeVal.value)});
-      pageIdx.value = 1;
+      logFn('log', { module: 'table-pagging改变页面规格', result: parseInt(pageSizeVal.value)})
+      pageIdx.value = 1
       emit('updatePageSize', parseInt(pageSizeVal.value));
     }
 
@@ -80,10 +80,10 @@ export default defineComponent ({
       go2AftPage,
       go2PrePage,
       doSearch,
-      changePageSize
-    };
-  }
-});
+      changePageSize,
+    }
+  },
+})
 </script>
 
 <style scoped>

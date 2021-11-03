@@ -1,38 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="6" failures="1" errors="0" time="4.069">
-  <testsuite name="Table" errors="0" failures="1" skipped="0" timestamp="2021-10-31T13:21:57" time="1.986" tests="6">
-    <testcase classname="Table render" name="Table render" time="0.107">
+<testsuites name="jest tests" tests="6" failures="0" errors="0" time="4.688">
+  <testsuite name="Table" errors="0" failures="0" skipped="0" timestamp="2021-11-03T15:10:19" time="2.294" tests="6">
+    <testcase classname="Table render" name="Table render" time="0.12">
     </testcase>
-    <testcase classname="Table 基础使用展示" name="Table 基础使用展示" time="0.044">
+    <testcase classname="Table 基础使用展示" name="Table 基础使用展示" time="0.048">
     </testcase>
-    <testcase classname="Table 点击升降序" name="Table 点击升降序" time="0.095">
+    <testcase classname="Table 点击升降序" name="Table 点击升降序" time="0.169">
     </testcase>
-    <testcase classname="Table 配置不展示表头" name="Table 配置不展示表头" time="0.032">
+    <testcase classname="Table 配置不展示表头" name="Table 配置不展示表头" time="0.046">
     </testcase>
-    <testcase classname="Table 配置不展示分页" name="Table 配置不展示分页" time="0.023">
+    <testcase classname="Table 配置不展示分页" name="Table 配置不展示分页" time="0.031">
     </testcase>
-    <testcase classname="Table 配置居中对齐" name="Table 配置居中对齐" time="0.03">
-      <failure>TypeError: Cannot read property &apos;style&apos; of undefined
-    at Object.&lt;anonymous&gt; (C:\table\table\src\__tests__\table.spec.js:110:12)
-    at Promise.then.completed (C:\table\table\node_modules\jest-circus\build\utils.js:390:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (C:\table\table\node_modules\jest-circus\build\utils.js:315:10)
-    at _callCircusTest (C:\table\table\node_modules\jest-circus\build\run.js:218:40)
-    at processTicksAndRejections (internal/process/task_queues.js:95:5)
-    at _runTest (C:\table\table\node_modules\jest-circus\build\run.js:155:3)
-    at _runTestsForDescribeBlock (C:\table\table\node_modules\jest-circus\build\run.js:66:9)
-    at _runTestsForDescribeBlock (C:\table\table\node_modules\jest-circus\build\run.js:60:9)
-    at run (C:\table\table\node_modules\jest-circus\build\run.js:25:3)
-    at runAndTransformResultsToJestFormat (C:\table\table\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:167:21)
-    at jestAdapter (C:\table\table\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
-    at runTestInternal (C:\table\table\node_modules\jest-runner\build\runTest.js:389:16)
-    at runTest (C:\table\table\node_modules\jest-runner\build\runTest.js:475:34)
-    at TestRunner.runTests (C:\table\table\node_modules\jest-runner\build\index.js:111:12)
-    at TestScheduler.scheduleTests (C:\table\table\node_modules\@jest\core\build\TestScheduler.js:333:13)
-    at runJest (C:\table\table\node_modules\@jest\core\build\runJest.js:401:19)
-    at _run10000 (C:\table\table\node_modules\@jest\core\build\cli\index.js:320:7)
-    at runCLI (C:\table\table\node_modules\@jest\core\build\cli\index.js:173:3)
-    at Object.run (C:\table\table\node_modules\jest\node_modules\jest-cli\build\cli\index.js:155:37)</failure>
+    <testcase classname="Table 配置居中对齐" name="Table 配置居中对齐" time="0.032">
     </testcase>
   </testsuite>
 </testsuites>

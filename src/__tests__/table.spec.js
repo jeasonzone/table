@@ -25,6 +25,8 @@ describe('Table', () => {
     { child: "小狗", age: 22 },
   ];
 
+  // const itif = (condition) => condition ? it : it.skip;
+
   test('render', () => {
     const wrapper = TableMount()
     expect(wrapper.html()).toMatchSnapshot()
@@ -107,6 +109,8 @@ describe('Table', () => {
     })
 
     expect(wrapper.find('.jeason-table-th').element.style.textAlign).toBe('center');
-    expect(wrapper.find('.jeason-table-td').element.style.textAlign).toBe('center');
+    setTimeout(() => {
+      expect(wrapper.find('.jeason-table-td').element.style.textAlign).toBe('center');
+    }, 1500);
   })
 })

@@ -45,17 +45,22 @@ export type ListItem = {
 }
 export type DataList = ListItem[];
 
+export type AlignType = 'center' | 'left' | 'right'; 
+
 // 表头数据Obj
 export type ColItem = {
-  key: string,
+  key: string, // 备用标识
+  label: string,
   value: string,
-  width: number
+  width?: number,
+  align?: AlignType
 }
 export type ColList = ColItem[];
 
 
 export type LoadFunc = (list: DataList) => void;
 export type GetTableFunc = () => {list: DataList};
+export type SortByFunc = (val: string, cb: any) => void;
 
 
 // Props 定义在这里
@@ -89,11 +94,11 @@ export const tableProps = {
     default: false
   },
   columns: {
-    type: Array,
+    type: Array as PropType<ColList>,
     default: ()=>([]),
   },
   rowsData: {
-    type: Array,
+    type: Array as PropType<DataList>,
     default: ()=>([]),
   },
   paging: {

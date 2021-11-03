@@ -1,4 +1,5 @@
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from '@vue/composition-api';
+import { ListItem, ColItem } from "../lib/types";
 
 export default defineComponent({
   // eslint-disable-next-line vue/require-prop-types
@@ -7,8 +8,8 @@ export default defineComponent({
   setup(props) {
     const { cols, listData, elipse } = props;
     return () => {
-      const renderBody = listData?.value?.map(item => {
-        let renderTd = cols?.map(key => {
+      const renderBody = listData?.value?.map((item: ListItem) => {
+        let renderTd = cols?.map((key: ColItem) => {
           return (<td
             class={[{'table-body-elipse': key.width && elipse}, 'jeason-table-td']}
             style={[key.width ? [{width: key.width + 'px'}] : '', {textAlign: key.align}]}>

@@ -2,13 +2,15 @@ import {
   defineComponent,
   set,
   ref,
+  provide,
   onMounted
 } from '@vue/composition-api';
-import { tableProps, DataList, SortOrder } from "./types";
-import PagingBar from "./paging.vue";
-import TableHead from "./head";
-import TableBody from "./body";
-import {logFn} from './utils.ts';
+import { tableProps, DataList, ColItem } from "./lib/types";
+import PagingBar from "./table_container/paging.vue";
+import TableHead from "./table_container/head";
+import TableBody from "./table_container/body";
+import {logFn} from './lib/utils';
+import { useSort } from './hook/sort_hook';
 
 export default defineComponent({
   // eslint-disable-next-line vue/require-prop-types
@@ -18,14 +20,14 @@ export default defineComponent({
     let { paging, rowsData, columns, isShowPaging, tableSize } = props;
     let pageSizes = paging.pageSize;
     let activePage = ref(1);
-    let sortKey = ref("");
-    let listData: DataList = ref([]);
-    let defaultData: DataList =ref(rowsData);
-    let sortOrders: SortOrder = ref({});
+    let listData = ref<null | DataList>([]);
+    let { getSortBtnCls, sortBy, sortOrders, sortKey, defaultData } = useSort(rowsData);
+    provide('getSortBtnCls', getSortBtnCls);
+    provide('sortBy', sortBy);
 
     onMounted(() => {
       logFn('info', { module: 'table-init初始化' });
-      columns.filter((item) => {
+      columns.filter((item: ColItem) => {
         set(sortOrders.value, item.value, 1)
       });
       loadData(rowsData);
@@ -37,6 +39,8 @@ export default defineComponent({
       let data = list;
       let order = sortOrders.value[sortKey.value];
       if (sortKey.value) {
+
+        // 重组数据
         data = rowsData.slice(0).sort((pre, aft) => {
           pre = pre[sortKey.value];
           aft = aft[sortKey.value];
@@ -57,7 +61,7 @@ export default defineComponent({
     const getSelection = () => {};
 
     // 改变页面规格
-    const changePageSize = (v) => {
+    const changePageSize = (v:string) => {
       logFn('log', { module: 'table-change-size改变页面规格', target: 'changePageSize', result: v });
       pageSizes = v;
       loadData(rowsData);
@@ -77,7 +81,7 @@ export default defineComponent({
         sortKey.value = '';
       } else {
         sortKey.value = type;
-        sortOrders.value[type] = -sortOrders.value[type];
+        set(sortOrders.value, type, -sortOrders.value[type]);
       }
       loadData(type ? rowsData : defaultData.value);
     }
