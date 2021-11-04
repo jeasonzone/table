@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils'
+import { delay } from 'lodash';
 import { TestTable } from '../table'
 
 describe('Table', () => {
@@ -49,11 +50,11 @@ describe('Table', () => {
     expect(wrapper.find('.jeason-table-header').exists()).toBe(true);  // 表格头部
     expect(wrapper.find('.jeason-table-body').exists()).toBe(true);    // 表格内容
     
-    setTimeout(() => {
+    delay(() => {
       expect(wrapper.find('.paging-input').value).toBe(1);
     }, 1500);
 
-    setTimeout(() => {
+    delay(() => {
       expect(wrapper.vm.getData()).toEqual([{"age": 3, "child": "小明"}, {"age": 1, "child": "小黄"}, {"age": 2, "child": "小亮"}, {"age": 4, "child": "小红"}, {"age": 5, "child": "小橙"}, {"age": 6, "child": "小绿"}, {"age": 7, "child": "小白"}, {"age": 8, "child": "小青"}, {"age": 33, "child": "小蓝"}, {"age": 5, "child": "小紫"}]);
     }, 1500);
   })
@@ -66,23 +67,23 @@ describe('Table', () => {
       },
     })
     
-    setTimeout(() => {
+    delay(() => {
       expect(wrapper.find('.paging-input').value).toBe(1);
     }, 1500);
 
     const jeasonTablePagingAft = wrapper.find('.aft-btn');
     await jeasonTablePagingAft.trigger('click');
 
-    setTimeout(() => {
+    delay(() => {
       expect(wrapper.find('.paging-input').value).toBe(2);
-    }, 1500);
+    }, 1500)
 
     const jeasonTablePagingPre = wrapper.find('.pre-btn');
     await jeasonTablePagingPre.trigger('click');
 
-    setTimeout(() => {
+    delay(() => {
       expect(wrapper.find('.paging-input').value).toBe(1);
-    }, 1500);
+    }, 1500)
   })
 
   test('点击升降序', async () => {
@@ -142,9 +143,9 @@ describe('Table', () => {
     })
 
     expect(wrapper.find('.jeason-table-th').element.style.textAlign).toBe('center');
-    setTimeout(() => {
+    delay(() => {
       expect(wrapper.find('.jeason-table-td').element.style.textAlign).toBe('center');
-    }, 1500);
+    }, 1500)
   })
 
   test('修改页面表格规格', async () => {
@@ -161,9 +162,10 @@ describe('Table', () => {
       await jeasonTableSelect.trigger('click');
       await jeasonTableSelectItem.trigger('click');
       await jeasonTableSelect.trigger('change');
-      setTimeout(() => {
+      
+      delay(() => {
         expect(wrapper.vm.getData()).toEqual([{"age": 3, "child": "小明"}, {"age": 1, "child": "小黄"}, {"age": 2, "child": "小亮"}, {"age": 4, "child": "小红"}, {"age": 5, "child": "小橙"}]);
-      }, 1500);
+      }, 1500)
     };
 
     fn1();
@@ -177,10 +179,8 @@ describe('Table', () => {
       },
     })
     wrapper.vm.changePageSize(5);
-    setTimeout(() => {
-      expect(wrapper.vm.getData()).toEqual([{"age": 3, "child": "小明"}, {"age": 1, "child": "小黄"}, {"age": 2, "child": "小亮"}, {"age": 4, "child": "小红"}, {"age": 5, "child": "小橙"}]);
-    }, 2500);
-    
+    await delayFn();
+    expect(wrapper.vm.getData()).toEqual([{"age": 3, "child": "小明"}, {"age": 1, "child": "小黄"}, {"age": 2, "child": "小亮"}, {"age": 4, "child": "小红"}, {"age": 5, "child": "小橙"}]);
   })
   
   test('跳转到第2页', async () => {
@@ -193,7 +193,7 @@ describe('Table', () => {
     const jeasonPagingVal= wrapper.find('.paging-input');
     jeasonPagingVal.setValue('2');
     jeasonPagingVal.trigger('keyup.enter');
-    setTimeout(() => {
+    delay(() => {
       expect(jeasonPagingVal.value).toBe('2')
       expect(wrapper.vm.getData()).toEqual([{ child: "小丑", age: 7 },
       { child: "小九", age: 9 },
@@ -204,3 +204,9 @@ describe('Table', () => {
     }, 1500);
   })
 })
+
+function delayFn () {
+  return new Promise(resolve => {
+    setTimeout(resolve, 1000)
+  });
+}

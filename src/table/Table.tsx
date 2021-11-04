@@ -6,7 +6,7 @@ import {
   onMounted, h
 } from '@vue/composition-api';
 import { tableProps, DataList, ColItem } from "./lib/types";
-import PagingBar from "./table_container/paging.vue";
+import PagingBar from "./table_container/pagingTest";
 import TableHead from "./table_container/head";
 import TableBody from "./table_container/body";
 import {logFn} from './lib/utils';
