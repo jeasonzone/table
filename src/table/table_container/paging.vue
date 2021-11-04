@@ -16,8 +16,8 @@
     <!-- 下一页 -->
 
     <div class="select">
-      <select v-model="pageSizeVal" name="group" @change="changePageSize">
-        <option value="5" selected>5</option>
+      <select class="select-trigger" v-model="pageSizeVal" name="group" @change="changePageSize">
+        <option value="5" class="select-item-5">5</option>
         <option value="10">10</option>
         <option value="20">20</option>
         <option value="50">50</option>
@@ -37,7 +37,7 @@ export default defineComponent ({
   setup (props, { emit }) {
     let { total, pageSize } = props
     let pageIdx = ref(1)
-    let pageSizeVal = ref(pageSize)
+    let pageSizeVal = ref<null | String | Number>(pageSize)
 
     const isDisablePre = computed(() => {
       return pageIdx.value === 1

@@ -3,7 +3,7 @@ import {
   set,
   ref,
   provide,
-  onMounted
+  onMounted, h
 } from '@vue/composition-api';
 import { tableProps, DataList, ColItem } from "./lib/types";
 import PagingBar from "./table_container/paging.vue";
@@ -17,20 +17,18 @@ export default defineComponent({
   name: 'Table',
   props: tableProps,
   setup(props) {
-    let { paging, rowsData, columns, isShowPaging, tableSize } = props;
-    let pageSizes = paging.pageSize;
+    let pageSizes = props.paging.pageSize;
     let activePage = ref(1);
-    let listData = ref<null | DataList>([]);
-    let { getSortBtnCls, sortBy, sortOrders, sortKey, defaultData } = useSort(rowsData);
+    let { getSortBtnCls, sortBy, sortOrders, sortKey, defaultData, listData } = useSort(props.rowsData);
     provide('getSortBtnCls', getSortBtnCls);
     provide('sortBy', sortBy);
 
     onMounted(() => {
       logFn('info', { module: 'table-init初始化' });
-      columns.filter((item: ColItem) => {
+      props.columns.filter((item: ColItem) => {
         set(sortOrders.value, item.value, 1)
       });
-      loadData(rowsData);
+      loadData(props.rowsData);
     });
 
     // 记载表格数据
@@ -41,7 +39,7 @@ export default defineComponent({
       if (sortKey.value) {
 
         // 重组数据
-        data = rowsData.slice(0).sort((pre, aft) => {
+        data = props.rowsData.slice(0).sort((pre, aft) => {
           pre = pre[sortKey.value];
           aft = aft[sortKey.value];
           return (pre === aft ? 0 : pre > aft ? 1 : -1) * order;
@@ -64,14 +62,14 @@ export default defineComponent({
     const changePageSize = (v:string) => {
       logFn('log', { module: 'table-change-size改变页面规格', target: 'changePageSize', result: v });
       pageSizes = v;
-      loadData(rowsData);
+      loadData(props.rowsData);
     }
 
     // 分页页数跳转
     const changePage = (v: number) => {
       logFn('log', { module: 'table-jump-page跳转页面', target: 'changePage', result: v });
       activePage.value = v;
-      loadData(rowsData);
+      loadData(props.rowsData);
     }
 
     // 重新加载表格
@@ -83,32 +81,44 @@ export default defineComponent({
         sortKey.value = type;
         set(sortOrders.value, type, -sortOrders.value[type]);
       }
-      loadData(type ? rowsData : defaultData.value);
+      loadData(type ? props.rowsData : defaultData.value);
     }
 
-    return () => {
-      const sortableNode = (
-          <div class="jeason-table">
-            <table>
-            { tableSize === 'normal' ? <thead class="jeason-table-header">
-
-                {/* 头部 */}
-                <TableHead cols={columns} sortOrders={sortOrders} sortKey={sortKey} on={{['reloadTable']: reloadTable}} />
-              </thead> : '' }
-
-              {/* 内容部分 */}
-              <TableBody cols={columns} listData={listData} elipse={props.elipse} />
-            </table>
-            {/* 尾部 */}
-            { isShowPaging ? <div class="jeason-table-footer">
-              <PagingBar
-                total={rowsData.length}
-                pageSize={pageSizes}
-                on={{['changePage']: changePage, ['updatePageSize']: changePageSize}} />
-              </div> : '' }
-        </div>
-      )
-      return sortableNode
+    return {
+      sortKey,
+      sortOrders,
+      reloadTable,
+      pageSizes,
+      changePage,
+      changePageSize,
+      defaultData,
+      listData,
+      getSelection,
+      getData
     }
+  },
+  render () {
+    const sortableNode = (
+        <div class="jeason-table">
+          <table>
+          { this.tableSize === 'normal' ? <thead class="jeason-table-header">
+
+              {/* 头部 */}
+              <TableHead cols={this.columns} sortOrders={this.sortOrders} sortKey={this.sortKey} on={{['reloadTable']: this.reloadTable}} />
+            </thead> : '' }
+
+            {/* 内容部分 */}
+            <TableBody cols={this.columns} listData={this.listData} elipse={this.elipse} />
+          </table>
+          {/* 尾部 */}
+          { this.isShowPaging ? <div class="jeason-table-footer">
+            <PagingBar
+              total={this.rowsData.length}
+              pageSize={this.pageSizes}
+              on={{['changePage']: this.changePage, ['updatePageSize']: this.changePageSize}} />
+            </div> : '' }
+      </div>
+    )
+    return sortableNode 
   }
 })

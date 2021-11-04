@@ -8,6 +8,7 @@ export const useSort = (rowsData: DataList) => {
     let sortOrders: SortOrder = ref({});
     let sortKey = ref("");
     let defaultData =ref(rowsData);
+    let listData = ref<null | DataList>([]);
 
     const getSortBtnCls = (item: string) => {
         return sortOrders.value[item] === 1 ? "asc" : "dsc";
@@ -27,6 +28,7 @@ export const useSort = (rowsData: DataList) => {
         sortBy,
         sortOrders,
         sortKey,
-        defaultData
+        defaultData,
+        listData
     }
 }

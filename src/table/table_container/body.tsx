@@ -6,12 +6,11 @@ export default defineComponent({
   name: 'Body',
   props: ['cols', 'listData', 'elipse'],
   setup(props) {
-    const { cols, listData, elipse } = props;
     return () => {
-      const renderBody = listData?.value?.map((item: ListItem) => {
-        let renderTd = cols?.map((key: ColItem) => {
+      const renderBody = props.listData?.map((item: ListItem) => {
+        let renderTd = props.cols?.map((key: ColItem) => {
           return (<td
-            class={[{'table-body-elipse': key.width && elipse}, 'jeason-table-td']}
+            class={[{'table-body-elipse': key.width && props.elipse}, 'jeason-table-td']}
             style={[key.width ? [{width: key.width + 'px'}] : '', {textAlign: key.align}]}>
             {item[key.value]}
           </td>)

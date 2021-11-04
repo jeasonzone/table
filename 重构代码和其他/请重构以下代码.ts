@@ -55,8 +55,16 @@ function uploadByHttp (file: string): boolean {
 
 function logFn (type, opt: LogOpt) {
     let time = new Date();
-    
-    console[type](`${time}--${opt.module}--${opt.target}--${opt.event}--${opt.result}`);
+
+    let desc = '';
+    opt.module && (desc += ' module: ----- ' + opt.module + '\n');
+    opt.target && (desc += ' target: ----- ' + opt.target + '\n');
+    opt.event && (desc += ' event: ----- ' + opt.event + '\n');
+    opt.result && (desc += ' result: ----- ' + JSON.stringify(opt.result) + '\n');
+
+    console[type]('-----------------------------' + '\n' +
+        `time: ---${time}\n ${desc}` +
+        '-----------------------------');
 }
 
 // 实现如下

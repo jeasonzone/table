@@ -48,9 +48,42 @@ describe('Table', () => {
     expect(wrapper.find('.jeason-table').exists()).toBe(true);  // 整体表格
     expect(wrapper.find('.jeason-table-header').exists()).toBe(true);  // 表格头部
     expect(wrapper.find('.jeason-table-body').exists()).toBe(true);    // 表格内容
-    expect(wrapper.find('.jeason-table-footer').exists()).toBe(true);  // 表格底部
+    
+    setTimeout(() => {
+      expect(wrapper.find('.paging-input').value).toBe(1);
+    }, 1500);
+
+    setTimeout(() => {
+      expect(wrapper.vm.getData()).toEqual([{"age": 3, "child": "小明"}, {"age": 1, "child": "小黄"}, {"age": 2, "child": "小亮"}, {"age": 4, "child": "小红"}, {"age": 5, "child": "小橙"}, {"age": 6, "child": "小绿"}, {"age": 7, "child": "小白"}, {"age": 8, "child": "小青"}, {"age": 33, "child": "小蓝"}, {"age": 5, "child": "小紫"}]);
+    }, 1500);
   })
 
+  test('点击上/下一页', async () => {
+    const wrapper = TableMount({
+      propsData: {
+        rowsData: rowsData,
+        columns: columns
+      },
+    })
+    
+    setTimeout(() => {
+      expect(wrapper.find('.paging-input').value).toBe(1);
+    }, 1500);
+
+    const jeasonTablePagingAft = wrapper.find('.aft-btn');
+    await jeasonTablePagingAft.trigger('click');
+
+    setTimeout(() => {
+      expect(wrapper.find('.paging-input').value).toBe(2);
+    }, 1500);
+
+    const jeasonTablePagingPre = wrapper.find('.pre-btn');
+    await jeasonTablePagingPre.trigger('click');
+
+    setTimeout(() => {
+      expect(wrapper.find('.paging-input').value).toBe(1);
+    }, 1500);
+  })
 
   test('点击升降序', async () => {
     const wrapper = TableMount({
@@ -111,6 +144,63 @@ describe('Table', () => {
     expect(wrapper.find('.jeason-table-th').element.style.textAlign).toBe('center');
     setTimeout(() => {
       expect(wrapper.find('.jeason-table-td').element.style.textAlign).toBe('center');
+    }, 1500);
+  })
+
+  test('修改页面表格规格', async () => {
+    const wrapper = TableMount({
+      propsData: {
+        rowsData: rowsData,
+        columns: columns
+      },
+    })
+
+    const jeasonTableSelect = wrapper.find('.select-trigger');
+    const jeasonTableSelectItem = wrapper.find('.select-item-5');
+    const fn1 = async () => {
+      await jeasonTableSelect.trigger('click');
+      await jeasonTableSelectItem.trigger('click');
+      await jeasonTableSelect.trigger('change');
+      setTimeout(() => {
+        expect(wrapper.vm.getData()).toEqual([{"age": 3, "child": "小明"}, {"age": 1, "child": "小黄"}, {"age": 2, "child": "小亮"}, {"age": 4, "child": "小红"}, {"age": 5, "child": "小橙"}]);
+      }, 1500);
+    };
+
+    fn1();
+  })
+
+  test('调用修改页面表格规格函数', async () => {
+    const wrapper = TableMount({
+      propsData: {
+        rowsData: rowsData,
+        columns: columns
+      },
+    })
+    wrapper.vm.changePageSize(5);
+    setTimeout(() => {
+      expect(wrapper.vm.getData()).toEqual([{"age": 3, "child": "小明"}, {"age": 1, "child": "小黄"}, {"age": 2, "child": "小亮"}, {"age": 4, "child": "小红"}, {"age": 5, "child": "小橙"}]);
+    }, 2500);
+    
+  })
+  
+  test('跳转到第2页', async () => {
+    const wrapper = TableMount({
+      propsData: {
+        rowsData: rowsData,
+        columns: columns
+      },
+    })
+    const jeasonPagingVal= wrapper.find('.paging-input');
+    jeasonPagingVal.setValue('2');
+    jeasonPagingVal.trigger('keyup.enter');
+    setTimeout(() => {
+      expect(jeasonPagingVal.value).toBe('2')
+      expect(wrapper.vm.getData()).toEqual([{ child: "小丑", age: 7 },
+      { child: "小九", age: 9 },
+      { child: "小七", age: 7 },
+      { child: "小八", age: 77 },
+      { child: "小鬼", age: 3 },
+      { child: "小狗", age: 22 }]);
     }, 1500);
   })
 })

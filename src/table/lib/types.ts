@@ -62,7 +62,6 @@ export type LoadFunc = (list: DataList) => void;
 export type GetTableFunc = () => {list: DataList};
 export type SortByFunc = (val: string, cb: any) => void;
 
-
 // Props 定义在这里
 export const tableProps = {
   tableId: {
@@ -115,7 +114,7 @@ export const pagingProps = {
     default: 0
   },
   pageSize: {
-    type: Number,
+    type: Number || String,
     default: 10
   }
 }

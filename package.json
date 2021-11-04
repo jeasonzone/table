@@ -6,7 +6,7 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "test": "jest",
+    "test": "cls && jest",
     "eslint": "eslint --fix  ./src ./demo --ext .vue,.js,.ts,.jsx,.tsx"
   },
   "dependencies": {
