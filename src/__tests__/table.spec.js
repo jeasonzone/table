@@ -49,14 +49,12 @@ describe('Table', () => {
     expect(wrapper.find('.jeason-table').exists()).toBe(true);  // 整体表格
     expect(wrapper.find('.jeason-table-header').exists()).toBe(true);  // 表格头部
     expect(wrapper.find('.jeason-table-body').exists()).toBe(true);    // 表格内容
-    
-    delay(() => {
-      expect(wrapper.find('.paging-input').value).toBe(1);
-    }, 1500);
 
-    delay(() => {
-      expect(wrapper.vm.getData()).toEqual([{"age": 3, "child": "小明"}, {"age": 1, "child": "小黄"}, {"age": 2, "child": "小亮"}, {"age": 4, "child": "小红"}, {"age": 5, "child": "小橙"}, {"age": 6, "child": "小绿"}, {"age": 7, "child": "小白"}, {"age": 8, "child": "小青"}, {"age": 33, "child": "小蓝"}, {"age": 5, "child": "小紫"}]);
-    }, 1500);
+    delayFn(() => {
+      expect(wrapper.find('.paging-input').value).toBe(1);
+    });
+    
+    delayFn(expect(wrapper.vm.getData()).toEqual([{"age": 3, "child": "小明"}, {"age": 1, "child": "小黄"}, {"age": 2, "child": "小亮"}, {"age": 4, "child": "小红"}, {"age": 5, "child": "小橙"}, {"age": 6, "child": "小绿"}, {"age": 7, "child": "小白"}, {"age": 8, "child": "小青"}, {"age": 33, "child": "小蓝"}, {"age": 5, "child": "小紫"}]));
   })
 
   test('点击上/下一页', async () => {
@@ -66,24 +64,30 @@ describe('Table', () => {
         columns: columns
       },
     })
-    
-    delay(() => {
+
+    function fnCheckPagingInit () {
       expect(wrapper.find('.paging-input').value).toBe(1);
-    }, 1500);
+    }
+    
+    delayFn(fnCheckPagingInit);
 
     const jeasonTablePagingAft = wrapper.find('.aft-btn');
     await jeasonTablePagingAft.trigger('click');
 
-    delay(() => {
+    function fnCheckPagingNext () {
       expect(wrapper.find('.paging-input').value).toBe(2);
-    }, 1500)
+    }
+
+    delayFn(fnCheckPagingNext);
 
     const jeasonTablePagingPre = wrapper.find('.pre-btn');
     await jeasonTablePagingPre.trigger('click');
 
-    delay(() => {
+    function fnCheckPagingReturn () {
       expect(wrapper.find('.paging-input').value).toBe(1);
-    }, 1500)
+    }
+
+    delayFn(fnCheckPagingReturn);     
   })
 
   test('点击升降序', async () => {
@@ -143,9 +147,7 @@ describe('Table', () => {
     })
 
     expect(wrapper.find('.jeason-table-th').element.style.textAlign).toBe('center');
-    delay(() => {
-      expect(wrapper.find('.jeason-table-td').element.style.textAlign).toBe('center');
-    }, 1500)
+    delayFn(expect(wrapper.find('.jeason-table-td').element.style.textAlign).toBe('center'));
   })
 
   test('修改页面表格规格', async () => {
@@ -163,9 +165,9 @@ describe('Table', () => {
       await jeasonTableSelectItem.trigger('click');
       await jeasonTableSelect.trigger('change');
       
-      delay(() => {
-        expect(wrapper.vm.getData()).toEqual([{"age": 3, "child": "小明"}, {"age": 1, "child": "小黄"}, {"age": 2, "child": "小亮"}, {"age": 4, "child": "小红"}, {"age": 5, "child": "小橙"}]);
-      }, 1500)
+      delayFn(function cb () {
+        expect(wrapper.vm.getData()).toEqual([{"age": 3, "child": "小明"}, {"age": 1, "child": "小黄"}, {"age": 2, "child": "小亮"}, {"age": 4, "child": "小红"}, {"age": 5, "child": "小橙"}])
+      });
     };
 
     fn1();
@@ -179,8 +181,9 @@ describe('Table', () => {
       },
     })
     wrapper.vm.changePageSize(5);
-    await delayFn();
-    expect(wrapper.vm.getData()).toEqual([{"age": 3, "child": "小明"}, {"age": 1, "child": "小黄"}, {"age": 2, "child": "小亮"}, {"age": 4, "child": "小红"}, {"age": 5, "child": "小橙"}]);
+    delayFn(() => {
+      expect(wrapper.vm.getData()).toEqual([{"age": 3, "child": "小明"}, {"age": 1, "child": "小黄"}, {"age": 2, "child": "小亮"}, {"age": 4, "child": "小红"}, {"age": 5, "child": "小橙"}])
+    });
   })
   
   test('跳转到第2页', async () => {
@@ -193,7 +196,7 @@ describe('Table', () => {
     const jeasonPagingVal= wrapper.find('.paging-input');
     jeasonPagingVal.setValue('2');
     jeasonPagingVal.trigger('keyup.enter');
-    delay(() => {
+    delayFn(() => {
       expect(jeasonPagingVal.value).toBe('2')
       expect(wrapper.vm.getData()).toEqual([{ child: "小丑", age: 7 },
       { child: "小九", age: 9 },
@@ -201,12 +204,13 @@ describe('Table', () => {
       { child: "小八", age: 77 },
       { child: "小鬼", age: 3 },
       { child: "小狗", age: 22 }]);
-    }, 1500);
+    });
   })
 })
 
-function delayFn () {
+function delayFn (cb) {
   return new Promise(resolve => {
-    setTimeout(resolve, 1000)
+    delay(cb, 1500);
+    resolve();
   });
 }

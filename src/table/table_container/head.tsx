@@ -1,5 +1,6 @@
 import { defineComponent, inject } from '@vue/composition-api';
 import { ColItem } from "../lib/types";
+import { Isort } from '../lib/symbol';
 
 export default defineComponent({
   // eslint-disable-next-line vue/require-prop-types
@@ -10,8 +11,12 @@ export default defineComponent({
     const cb = (item?: any) => {
       emit('reloadTable', item);
     }
-    const getSortBtnCls: any = inject('getSortBtnCls');
-    const sortBy: any = inject('sortBy');
+
+
+    const IsortFn: any = inject(Isort);
+    const sortBy: any = IsortFn.sortBy;
+    const getSortBtnCls: any = IsortFn.getSortBtnCls;
+    
     return () => {
       const renderTh = props.cols?.map((item: ColItem) => {
         return (<th

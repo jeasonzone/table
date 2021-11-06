@@ -3,38 +3,34 @@ import {
   set,
   ref,
   provide,
-  onMounted, h
+  onMounted, h, computed
 } from '@vue/composition-api';
-import { tableProps, DataList, ColItem } from "./lib/types";
-import PagingBar from "./table_container/pagingTest";
+import { tableProps, ColItem } from "./lib/types";
+import PagingBar from "./table_container/paging";
 import TableHead from "./table_container/head";
 import TableBody from "./table_container/body";
 import {logFn} from './lib/utils';
 import { useSort } from './hook/sort_hook';
+import { Isort } from './lib/symbol';
 
+const ASC_PARAM = 1,
+  DSC_PARAM = -1;
 export default defineComponent({
   // eslint-disable-next-line vue/require-prop-types
   name: 'Table',
   props: tableProps,
   setup(props) {
-    let pageSizes = props.paging.pageSize;
+    let pageSizes = ref(props.paging.pageSize);
     let activePage = ref(1);
-    let { getSortBtnCls, sortBy, sortOrders, sortKey, defaultData, listData } = useSort(props.rowsData);
-    provide('getSortBtnCls', getSortBtnCls);
-    provide('sortBy', sortBy);
+    let { getSortBtnCls, sortBy, sortOrders, sortKey, defaultData } = useSort(props.rowsData);
+    let sortFn = {
+      sortBy,
+      getSortBtnCls
+    };
 
-    onMounted(() => {
-      logFn('info', { module: 'table-init初始化' });
-      props.columns.filter((item: ColItem) => {
-        set(sortOrders.value, item.value, 1)
-      });
-      loadData(props.rowsData);
-    });
-
-    // 记载表格数据
-    const loadData = (list: DataList) => {
-      logFn('info', { module: 'table-info-load记载表格数据', target: 'list', result: list });
-      let data = list;
+    let listData = computed(() => {
+      
+      let data = props.rowsData;
       let order = sortOrders.value[sortKey.value];
       if (sortKey.value) {
 
@@ -42,16 +38,25 @@ export default defineComponent({
         data = props.rowsData.slice(0).sort((pre, aft) => {
           pre = pre[sortKey.value];
           aft = aft[sortKey.value];
-          return (pre === aft ? 0 : pre > aft ? 1 : -1) * order;
+          return (pre === aft ? 0 : pre > aft ? ASC_PARAM : DSC_PARAM) * order;
         });
       }
-      let firstItem = pageSizes * (activePage.value - 1) + 1;
-      listData.value = data.slice(firstItem - 1, firstItem + pageSizes - 1);
-    };
+      let firstItem = pageSizes.value * (activePage.value - 1) + 1;
+      return data.slice(firstItem - 1, firstItem + pageSizes.value - 1);
+    })
+
+    provide(Isort, sortFn);
+
+    onMounted(() => {
+      logFn({ module: 'table-init初始化' }, 'info');
+      props.columns.filter((item: ColItem) => {
+        set(sortOrders.value, item.value, 1)
+      });
+    });
 
     // 获取表格数据
     const getData = () => {
-      logFn('log', { module: 'table-get-info获取表格数据', target: 'listData', result: listData.value });
+      logFn({ module: 'table-get-info获取表格数据', target: 'listData', result: listData.value });
       return listData.value || [];
     }
     
@@ -60,28 +65,25 @@ export default defineComponent({
 
     // 改变页面规格
     const changePageSize = (v:string) => {
-      logFn('log', { module: 'table-change-size改变页面规格', target: 'changePageSize', result: v });
-      pageSizes = v;
-      loadData(props.rowsData);
+      logFn({ module: 'table-change-size改变页面规格', target: 'changePageSize', result: v });
+      pageSizes.value = v;
     }
 
     // 分页页数跳转
     const changePage = (v: number) => {
-      logFn('log', { module: 'table-jump-page跳转页面', target: 'changePage', result: v });
+      logFn({ module: 'table-jump-page跳转页面', target: 'changePage', result: v });
       activePage.value = v;
-      loadData(props.rowsData);
     }
 
     // 重新加载表格
     const reloadTable = (type?: string) => {
-      logFn('log', { module: 'table-reload-重新加载表格', target: 'reloadTable'});
+      logFn({ module: 'table-reload-重新加载表格', target: 'reloadTable'});
       if (!type) {
         sortKey.value = '';
       } else {
         sortKey.value = type;
         set(sortOrders.value, type, -sortOrders.value[type]);
       }
-      loadData(type ? props.rowsData : defaultData.value);
     }
 
     return {
@@ -114,7 +116,7 @@ export default defineComponent({
           { this.isShowPaging ? <div class="jeason-table-footer">
             <PagingBar
               total={this.rowsData.length}
-              pageSize={this.pageSizes}
+              pageSize={this.pageSizes.value}
               on={{['changePage']: this.changePage, ['updatePageSize']: this.changePageSize}} />
             </div> : '' }
       </div>

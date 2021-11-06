@@ -9,39 +9,39 @@ export default defineComponent({
   setup(props, { emit }) {
     let { total, pageSize } = props
     let pageIdx = ref<number>(1)
-    let pageSizeVal = ref<null | String | Number>(pageSize)
+    let pageSizeVal = ref<null | string | number>(pageSize)
 
     const isDisablePre = computed(() => {
-      return pageIdx.value === 1
+      return parseInt(pageIdx.value as unknown as string) === 1
     })
 
     const isDisableAft = computed(() => {
-      return (total < pageSize) || (Math.ceil(total / pageSize) === pageIdx.value)
+      return (total < pageSize) || (Math.ceil(total / pageSize) === parseInt(pageIdx.value as unknown as string))
     })
 
     const go2PrePage = () => {
-      logFn('log', { module: 'table-pagging前一页' })
+      logFn({ module: 'table-pagging前一页' })
       if (isDisablePre.value) { return }
       pageIdx.value --
       emit('changePage', pageIdx.value)
     }
 
     const go2AftPage = () => {
-      logFn('log', { module: 'table-pagging后一页' })
+      logFn({ module: 'table-pagging后一页' })
       if (isDisableAft.value) { return }
       pageIdx.value ++
       emit('changePage', pageIdx.value)
     }
 
     const doSearch = () => {
-      logFn('log', { module: 'table-pagging前往某一页', result: pageIdx.value })
+      logFn({ module: 'table-pagging前往某一页', result: pageIdx.value })
       emit('changePage', pageIdx.value)
     }
 
     const changePageSize = () => {
-      logFn('log', { module: 'table-pagging改变页面规格', result: parseInt(pageSizeVal.value)})
+      logFn({ module: 'table-pagging改变页面规格', result: parseInt(pageSizeVal.value as string)})
       pageIdx.value = 1
-      emit('updatePageSize', parseInt(pageSizeVal.value));
+      emit('updatePageSize', parseInt(pageSizeVal.value as string));
     }
 
     return {

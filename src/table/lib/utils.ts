@@ -6,7 +6,7 @@ interface LogOpt {
 }
 
 export type ConsoleType = 'log' | 'info' | 'error' | 'trace'; 
-export function logFn (type: ConsoleType, opt: LogOpt) {
+export function logFn (opt: LogOpt, type: ConsoleType = 'log') {
     let time = new Date();
 
     let desc = '';

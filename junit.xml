@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="10" failures="0" errors="0" time="5.156">
-  <testsuite name="Table" errors="0" failures="0" skipped="0" timestamp="2021-11-04T08:18:56" time="3.169" tests="10">
-    <testcase classname="Table render" name="Table render" time="0.121">
+<testsuites name="jest tests" tests="10" failures="0" errors="0" time="5.352">
+  <testsuite name="Table" errors="0" failures="0" skipped="0" timestamp="2021-11-06T14:04:35" time="2.491" tests="10">
+    <testcase classname="Table render" name="Table render" time="0.211">
     </testcase>
-    <testcase classname="Table 基础使用展示" name="Table 基础使用展示" time="0.039">
+    <testcase classname="Table 基础使用展示" name="Table 基础使用展示" time="0.08">
     </testcase>
     <testcase classname="Table 点击上/下一页" name="Table 点击上/下一页" time="0.079">
     </testcase>
-    <testcase classname="Table 点击升降序" name="Table 点击升降序" time="0.098">
+    <testcase classname="Table 点击升降序" name="Table 点击升降序" time="0.086">
     </testcase>
-    <testcase classname="Table 配置不展示表头" name="Table 配置不展示表头" time="0.031">
+    <testcase classname="Table 配置不展示表头" name="Table 配置不展示表头" time="0.022">
     </testcase>
-    <testcase classname="Table 配置不展示分页" name="Table 配置不展示分页" time="0.02">
+    <testcase classname="Table 配置不展示分页" name="Table 配置不展示分页" time="0.024">
     </testcase>
-    <testcase classname="Table 配置居中对齐" name="Table 配置居中对齐" time="0.027">
+    <testcase classname="Table 配置居中对齐" name="Table 配置居中对齐" time="0.032">
     </testcase>
-    <testcase classname="Table 修改页面表格规格" name="Table 修改页面表格规格" time="0.042">
+    <testcase classname="Table 修改页面表格规格" name="Table 修改页面表格规格" time="0.037">
     </testcase>
-    <testcase classname="Table 调用修改页面表格规格函数" name="Table 调用修改页面表格规格函数" time="1.045">
+    <testcase classname="Table 调用修改页面表格规格函数" name="Table 调用修改页面表格规格函数" time="0.028">
     </testcase>
-    <testcase classname="Table 跳转到第2页" name="Table 跳转到第2页" time="0.046">
+    <testcase classname="Table 跳转到第2页" name="Table 跳转到第2页" time="0.05">
     </testcase>
   </testsuite>
 </testsuites>

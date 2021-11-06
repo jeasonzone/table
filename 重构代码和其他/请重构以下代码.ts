@@ -13,47 +13,45 @@ interface LogOpt {
     event?: string;
     result?: any
 }
+interface Iupload {
+    (file: string): Promise<boolean>
+}
+interface FileMap {
+    [key: string]: string
+}
+interface ActionFn {
+    action: Iupload
+}
+interface ActionsMap {
+    [key: string]: ActionFn
+}
 const NORMAL_REG = /\.(\w+)$/;
 
 // 制程阶段
-let actionsMap = {
+let actionsMap: ActionsMap = {
     ftp: { action: uploadByFtp },
-    sftp: { action: sftpFn },
-    http: { action: Promise.resolve(uploadByHttp) }
+    sftp: { action: uploadBySftp },
+    http: { action: uploadByHttp }
 };
 
-let fileMap = {
+let fileMap: FileMap = {
     txt: 'ftp',
     exe: 'sftp',
     doc: 'http'
 };
 
-function sftpFn (file) {
-    
-    new Promise((resolve, reject) => {
-        let cb = ret => {
-            if (ret) {
-                resolve(true)
-            } else {
-                logFn('error', { module: 'upload for sftp', result: 'fail' });
-                reject()
-            }
-        }
-        uploadBySftp([file], cb);
-    })
-}
-
 function uploadByFtp (file: string): Promise<boolean> {
     return new Promise(resolve => resolve(true))
 }
-function uploadBySftp (file: string[], cb: (ret: boolean) => void): void {
-    cb(true)
+function uploadBySftp (file: string): Promise<boolean> {
+    return new Promise(resolve => resolve(true))
 }
-function uploadByHttp (file: string): boolean {
-    return true
+function uploadByHttp (file: string): Promise<boolean> {
+    return new Promise(resolve => resolve(true))
 }
 
-function logFn (type, opt: LogOpt) {
+export type ConsoleType = 'log' | 'info' | 'error' | 'trace'; 
+export function logFn (opt: LogOpt, type: ConsoleType = 'log') {
     let time = new Date();
 
     let desc = '';
@@ -68,17 +66,20 @@ function logFn (type, opt: LogOpt) {
 }
 
 // 实现如下
-function upload (files: string[]): Promise<boolean> {
-    logFn('trace', { module: 'upload', target: 'files', result: files });
+function upload (files: string[], cb?: Function): Promise<boolean> {
+    logFn({ module: 'upload', target: 'files', result: files }, 'trace');
     return Promise.all(files.map(file => {
-        const ext = file.match(NORMAL_REG)[1];
-        let fileOpr = fileMap[ext];
-        logFn('info', { module: 'upload promise', result: '....' });
+        const ext = file.match(NORMAL_REG)?.[1];
+        let fileOpr = fileMap[ext as string];
+
+        logFn({ module: 'upload promise', result: '....' });
+
         if (!fileOpr || !actionsMap[fileOpr]) { return; }
-        actionsMap[fileOpr].action(file);
+        return actionsMap[fileOpr].action(file);
     })).then(() => {
-        logFn('log', {result: 'upload success.'})
-        return true
+        logFn({result: 'upload success.'});
+        cb?.();
+        return true;
     })
 }
 
